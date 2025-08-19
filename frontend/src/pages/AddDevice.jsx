@@ -56,7 +56,7 @@ export default function AddDevice({ wallet, auth }) {
 
       const tx = await contract.addKey(me.userId, newKey);
       await tx.wait();
-      setMsg("✅ Device added. You can now switch to that account and log in.");
+      setMsg("Device added. You can now switch to that account and log in.");
       setCheckAddr(newKey);
       setCheckResult(true);
       setNewKey("");
@@ -103,11 +103,11 @@ export default function AddDevice({ wallet, auth }) {
       <div className="rounded-2xl border bg-white p-4 shadow-sm dark:border-gray-800 dark:bg-gray-900">
         <div className="text-sm font-medium mb-2">Authorize a new address</div>
         <p className="text-sm text-gray-600 dark:text-gray-300 mb-3">
-          Import your **second Ganache account** into MetaMask, copy its address, and add it here.
-          After success, logout and log back in with the new account.
+          Import Second Ganache into MetaMask, copy its address, and add it here.
+          After Success, Logout and Log back in with the new account.
         </p>
 
-        <label className="mb-1 block text-sm text-gray-700 dark:text-gray-300">New device address</label>
+        <label className="mb-1 block text-sm text-gray-700 dark:text-gray-300">New Device Address</label>
         <input
           className="mb-3 w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-gray-900
                      placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-400
@@ -136,7 +136,7 @@ export default function AddDevice({ wallet, auth }) {
 
       {/* Verify key card */}
       <div className="rounded-2xl border bg-white p-4 shadow-sm dark:border-gray-800 dark:bg-gray-900">
-        <div className="text-sm font-medium mb-2">Verify address is authorized</div>
+        <div className="text-sm font-medium mb-2">Verify Address is Authorized</div>
         <div className="grid gap-2 sm:grid-cols-[1fr_auto]">
           <input
             className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-gray-900
@@ -161,7 +161,7 @@ export default function AddDevice({ wallet, auth }) {
               ? "border border-green-200 bg-green-50 text-green-800 dark:border-green-900/40 dark:bg-green-900/20"
               : "border border-red-200 bg-red-50 text-red-700 dark:border-red-900/40 dark:bg-red-900/20"
           }`}>
-            {checkResult ? "✅ This address is authorized for your account." : "⛔ Not authorized."}
+            {checkResult ? "This address is authorized for your account." : "Address Not Authorized."}
           </div>
         )}
       </div>
@@ -170,7 +170,7 @@ export default function AddDevice({ wallet, auth }) {
       <div className="text-sm text-gray-600 dark:text-gray-300">
         <ol className="list-decimal pl-5 space-y-1">
           <li>Copy the **second** Ganache account address.</li>
-          <li>Paste it into “New device address” and click <b>Add device</b>.</li>
+          <li>Paste it into “New Device Address” and click <b>Add Device</b>.</li>
           <li>Logout, switch MetaMask to that account, then login again.</li>
         </ol>
       </div>

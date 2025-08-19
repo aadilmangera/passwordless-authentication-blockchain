@@ -42,7 +42,7 @@ export default function Register({ wallet }) {
       setBusy(true);
       setMsg("");
       if (!signer) throw new Error("Connect your wallet first.");
-      if (!username.trim()) throw new Error("Enter a username (e.g., aadil@lakehead).");
+      if (!username.trim()) throw new Error("Enter a username (e.g., Aadil@Jesu).");
       const userId = toUserId(username);
 
       const g = parseGuardians();
@@ -96,7 +96,7 @@ export default function Register({ wallet }) {
         className="mb-3 w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-gray-900
                    placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-400
                    dark:bg-gray-800 dark:text-gray-100 dark:border-gray-700 dark:placeholder-gray-400"
-        placeholder="e.g. aadil@lakehead"
+        placeholder="e.g. Aadil@Jesu"
         value={username}
         onChange={e => setUsername(e.target.value)}
       />

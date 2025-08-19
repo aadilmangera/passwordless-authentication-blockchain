@@ -1,14 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.20;
 
-/**
- * Minimal on-chain key registry:
- * - userId (bytes32) -> set of authorized keys (addresses)
- * - register initial key, add/remove/rotate keys
- * - optional guardian-based recovery (threshold approvals)
- *
- * Simplicity > perfection for demo. Good enough for assignment and a smooth demo.
- */
+
 contract KeyRegistry {
     event UserRegistered(bytes32 indexed userId, address indexed key);
     event KeyAdded(bytes32 indexed userId, address indexed key);
@@ -25,9 +18,8 @@ contract KeyRegistry {
     mapping(bytes32 => uint256) public keyCount;
     mapping(bytes32 => RecoveryCfg) private _recoveryCfg;
 
-    // userId => newKey => guardian => approved?
+
     mapping(bytes32 => mapping(address => mapping(address => bool))) private _approved;
-    // userId => newKey => approvals
     mapping(bytes32 => mapping(address => uint256)) private _approvalCount;
 
     modifier onlyKey(bytes32 userId) {
@@ -82,7 +74,6 @@ contract KeyRegistry {
         emit KeyAdded(userId, newKey);
     }
 
-    // ---- Social recovery ----
     function proposeRecovery(bytes32 userId, address newKey) external {
         require(_recoveryCfg[userId].guardian[msg.sender], "Not a guardian");
         require(!_approved[userId][newKey][msg.sender], "Already approved");

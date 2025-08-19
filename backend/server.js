@@ -14,11 +14,11 @@ const JWT_SECRET = (process.env.JWT_SECRET || "").trim();
 const PORT = Number(process.env.PORT || 3001);
 
 if (!ethers.isAddress(REGISTRY_ADDR)) {
-  console.error(`❌ REGISTRY_ADDR missing/invalid. Got: "${REGISTRY_ADDR}"`);
+  console.error(`REGISTRY_ADDR missing/invalid. Got: "${REGISTRY_ADDR}"`);
   process.exit(1);
 }
 if (!JWT_SECRET) {
-  console.error("❌ JWT_SECRET missing.");
+  console.error("JWT_SECRET missing.");
   process.exit(1);
 }
 
