@@ -1,57 +1,65 @@
 import { useMemo } from "react";
-import { createBrowserRouter, RouterProvider, useNavigate } from "react-router-dom";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import useWallet from "./hooks/useWallet";
 import useAuth from "./hooks/useAuth";
-import Navbar from "./components/Navbar";
 import ProtectedRoute from "./components/ProtectedRoute";
-import AuthPage from "./pages/AuthPage";
-import DashboardPage from "./pages/DashboardPage";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
+import Dashboard from "./pages/Dashboard";
+import AppLayout from "./layouts/AppLayout";
+import AddDevice from "./pages/AddDevice";
 
-function Shell() {
-  const wallet = useWallet();
-  const auth = useAuth();
-  const nav = useNavigate();
-
-  const onLoggedIn = () => nav("/app");
-
-  return (
-    <>
-      <Navbar addr={wallet.addr} jwt={auth.jwt} onLogout={auth.logout} />
-      <div>
-        {/* Router outlet is managed by RouterProvider below */}
-      </div>
-    </>
-  );
-}
-
-function Routes() {
+export default function App() {
   const wallet = useWallet();
   const auth = useAuth();
 
   const router = useMemo(() => createBrowserRouter([
     {
-      path: "/",
+      path: "/login",
       element: (
-        <>
-          <Navbar addr={wallet.addr} jwt={auth.jwt} onLogout={auth.logout} />
-          <AuthPage wallet={wallet} auth={auth} onLoggedIn={() => router.navigate("/app")} />
-        </>
+        <AppLayout wallet={wallet} auth={auth}>
+          <Login wallet={wallet} auth={auth} onSuccess={() => router.navigate("/dashboard")} />
+        </AppLayout>
       )
     },
     {
-      path: "/app",
+  path: "/add-device",
+  element: (
+    <AppLayout wallet={wallet} auth={auth}>
+      <ProtectedRoute jwt={auth.jwt}>
+        <AddDevice wallet={wallet} auth={auth} />
+      </ProtectedRoute>
+    </AppLayout>
+  )
+    },
+    {
+      path: "/register",
       element: (
-        <>
-          <Navbar addr={wallet.addr} jwt={auth.jwt} onLogout={auth.logout} />
-          <ProtectedRoute jwt={auth.jwt}>
-            <DashboardPage wallet={wallet} auth={auth} />
-          </ProtectedRoute>
-        </>
+        <AppLayout wallet={wallet} auth={auth}>
+          <Register wallet={wallet} />
+        </AppLayout>
       )
+    },
+    {
+      path: "/dashboard",
+      element: (
+        <AppLayout wallet={wallet} auth={auth}>
+          <ProtectedRoute jwt={auth.jwt}>
+            <Dashboard wallet={wallet} auth={auth} />
+          </ProtectedRoute>
+        </AppLayout>
+      )
+    },
+    {
+      path: "/",
+      element: (
+        <AppLayout wallet={wallet} auth={auth}>
+          {/* redirect to /login */}
+        </AppLayout>
+      ),
+      loader: () => { window.location.replace("/login"); return null; }
     }
   ]), [wallet, auth]);
 
   return <RouterProvider router={router} />;
 }
-
-export default Routes;

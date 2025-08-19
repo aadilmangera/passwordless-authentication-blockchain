@@ -1,11 +1,19 @@
 const BACKEND = import.meta.env.VITE_BACKEND;
 
+async function handle(res) {
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) {
+    const msg = data?.error || `HTTP ${res.status}`;
+    throw new Error(msg);
+  }
+  return data;
+}
+
 export async function apiGet(path, jwt) {
   const res = await fetch(`${BACKEND}${path}`, {
     headers: jwt ? { Authorization: `Bearer ${jwt}` } : {}
   });
-  if (res.status === 401) throw new Error("invalid token");
-  return res.json();
+  return handle(res);
 }
 
 export async function apiPost(path, body, jwt) {
@@ -17,6 +25,5 @@ export async function apiPost(path, body, jwt) {
     },
     body: JSON.stringify(body || {})
   });
-  if (res.status === 401) throw new Error("invalid token");
-  return res.json();
+  return handle(res);
 }
