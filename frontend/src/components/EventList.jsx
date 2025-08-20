@@ -39,7 +39,7 @@ export default function EventList({ events, provider }) {
 
   return (
     <ul className="space-y-3">
-      {events.map((e, i) => {
+      {[...events].reverse().map((e, i) => {
         const bn = e.blockNumber;
         const ts = bn != null ? times[bn] : null;
         const when = ts ? timeAgoFrom(ts) : (bn != null ? `block #${bn}` : "");
