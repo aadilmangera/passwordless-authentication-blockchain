@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { createBrowserRouter, RouterProvider, Navigate} from "react-router-dom";
 import useWallet from "./hooks/useWallet";
 import useAuth from "./hooks/useAuth";
 import ProtectedRoute from "./components/ProtectedRoute";
@@ -18,11 +18,7 @@ export default function App() {
   const router = useMemo(() => createBrowserRouter([
     {
       path: "/",
-      element: (
-        <AppLayout wallet={wallet} auth={auth}>
-          <Auth wallet={wallet} auth={auth} />
-        </AppLayout>
-      ),
+      element: <Navigate to={auth.jwt ? "/dashboard" : "/auth"} replace />
     },
     {
       path: "/auth",
@@ -59,6 +55,10 @@ export default function App() {
           <Recovery wallet={wallet} />
         </AppLayout>
       ),
+    },
+    {
+      path: "*",
+      element: <Navigate to={auth.jwt ? "/dashboard" : "/auth"} replace />
     },
   ]), [wallet, auth]);
 

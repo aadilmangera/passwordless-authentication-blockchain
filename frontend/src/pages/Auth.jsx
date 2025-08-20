@@ -1,7 +1,8 @@
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
 import { ethers } from "ethers";
 import { apiPost } from "../utils/api";
 import { friendlyError } from "../utils/fmt";
+import { useNavigate } from "react-router-dom";
 import Modal from "../components/Modal";
 
 const REGISTRY_ADDR = import.meta.env.VITE_REGISTRY_ADDR;
@@ -15,7 +16,8 @@ const isAddr = (a) => { try { return ethers.isAddress(a); } catch { return false
 export default function Auth({ wallet, auth }) {
   const { signer, addr, connect } = wallet;
   const { loginSave } = auth;
-
+  const nav = useNavigate();
+  
   const [tab, setTab] = useState("login"); // 'login' | 'register'
 
   // shared
@@ -27,6 +29,10 @@ export default function Auth({ wallet, auth }) {
   const [guardiansRaw, setGuardiansRaw] = useState("");
   const [threshold, setThreshold] = useState("0");
   const [confirmOpen, setConfirmOpen] = useState(false);
+
+  useEffect(() => {
+     if (auth?.jwt) nav("/dashboard", { replace: true });
+  }, [auth?.jwt, nav]);
 
   const contract = useMemo(
     () => (signer ? new ethers.Contract(REGISTRY_ADDR, registryAbi, signer) : null),
@@ -57,6 +63,7 @@ export default function Auth({ wallet, auth }) {
       if (!v?.token) throw new Error(v?.error || "Login failed.");
       loginSave(v.token);
       setMsg("Successfully Logged In ");
+      nav("/dashboard", { replace: true });
     } catch (e) {
       setMsg(friendlyError(e?.shortMessage || e?.message));
     } finally { setBusy(false); }

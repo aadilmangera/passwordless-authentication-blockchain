@@ -22,7 +22,7 @@ export default function Navbar({ addr, jwt, onLogout }) {
         </Link>
 
         <nav className="flex items-center gap-1">
-          <Link className={linkCls("/auth")} to="/auth">Auth</Link>
+          {jwt ? null : <Link className={linkCls("/auth")} to="/auth">Auth</Link>}
           {jwt ? <Link className={linkCls("/dashboard")} to="/dashboard">Dashboard</Link> : null}
           {jwt ? <Link className={linkCls("/add-device")} to="/add-device">Add Device</Link> : null}
           <Link className={linkCls("/recovery")} to="/recovery">Recovery</Link>
